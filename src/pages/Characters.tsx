@@ -1,11 +1,27 @@
 import {CardCharacter} from "../components/CardCharacter";
-import {Fragment} from "react";
+import React, {Fragment, useEffect, useState} from "react";
+
+import {Character} from "../types"
+import {Link} from "react-router-dom";
+
 
 export const Characters = () => {
 
+    const [characters, setCharacters] = useState<Character[]>([])
+
+    const fetchData = () => {
+        return fetch("https://rickandmortyapi.com/api/character")
+            .then((response) => response.json())
+            .then(data => setCharacters(data.results))
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
     return (
         <>
-
             <div className="flex justify-center mt-6 mb-4 ">
                 <img src="/img/rickmorty.png" alt="Rick and Morty"/>
             </div>
@@ -25,18 +41,12 @@ export const Characters = () => {
                     id="status" type="text" placeholder="Status"/>
             </div>
 
-
-
-
             <div className="grid gap-5 grid-cols-4 grid-rows-2 mt-8 ">
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
-                <CardCharacter name="Rick" nation="Human" avatarUrl="/img/test.png"/>
+                {characters.map(character => (
+                    <Link key={character.id} to={`character/${character.id}`}>
+                        <CardCharacter character={character}/>
+                    </Link>
+                ))}
             </div>
 
             <div className="flex justify-center mt-8">
