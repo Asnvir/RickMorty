@@ -1,53 +1,50 @@
-import {CardCharacter} from "../components/CardCharacter";
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Suspense} from "react";
+import {Link, useLoaderData, defer, Await} from "react-router-dom";
 
 import {Character} from "../types"
-import {Link} from "react-router-dom";
+import {CardCharacter} from "../components/CardCharacter";
 
+
+export const getCharacters = async (): Promise<Character[]> => {
+    const response = await fetch("https://rickandmortyapi.com/api/character");
+    const {results} = await response.json();
+    return results;
+}
+
+
+export const charactersLoader = async () => {
+    return defer(
+        {
+            characters: await getCharacters() as Character[],
+        })
+};
 
 export const Characters = () => {
-
-    const [characters, setCharacters] = useState<Character[]>([])
-
-    const fetchData = () => {
-        return fetch("https://rickandmortyapi.com/api/character")
-            .then((response) => response.json())
-            .then(data => setCharacters(data.results))
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-
+    const characters = useLoaderData() as Character[];
     return (
         <>
             <div className="flex justify-center mt-6 mb-4 ">
                 <img src="/img/rickmorty.png" alt="Rick and Morty"/>
             </div>
 
-            <div className="flex justify-center mt-4 gap-5 ">
-                <input
-                    className="flex-1 appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 font-normal text-base"
-                    id="filterByName" type="text" placeholder="Filter by name..."/>
-                <input
-                    className="flex-1 appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500  font-normal text-base"
-                    id="species" type="text" placeholder="Species"/>
-                <input
-                    className="flex-1 appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500  font-normal text-base"
-                    id="gender" type="text" placeholder="Gender"/>
-                <input
-                    className="flex-1 appearance-none block bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 font-normal text-base"
-                    id="status" type="text" placeholder="Status"/>
-            </div>
 
-            <div className="grid gap-5 grid-cols-4 grid-rows-2 mt-8 ">
-                {characters.map(character => (
-                    <Link key={character.id} to={`character/${character.id}`}>
-                        <CardCharacter character={character}/>
-                    </Link>
-                ))}
-            </div>
+            <Suspense fallback={<h2>Loading...</h2>}>
+                <Await resolve={characters}>
+                    {({ characters : resolvedCharacters }: { characters: Character[] }) => {
+                        return (
+                            <div className="grid gap-5 grid-cols-4 grid-rows-2 mt-8 ">
+                                {resolvedCharacters.map(character => (
+                                    <Link key={character.id} to={`character/${character.id}`}>
+                                        <CardCharacter character={character}/>
+                                    </Link>
+                                ))}
+                            </div>
+                        );
+                    }}
+                </Await>
+            </Suspense>
+
+
 
             <div className="flex justify-center mt-8">
                 <button

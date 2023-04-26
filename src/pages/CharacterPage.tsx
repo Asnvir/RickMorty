@@ -5,8 +5,6 @@ import {EpisodeComponent} from "../components/EpisodeComponent";
 
 export const CharacterPage = () => {
     const {id=''} = useParams();
-    console.log(id);
-
     const [character,setCharacter] = useState<Character>();
 
 
@@ -75,7 +73,7 @@ export const CharacterPage = () => {
                     <p className="font-medium text-xl text-gray-500">Episodes</p>
                     
                     <div className="grid grid-rows-4 grid-cols-1 ">
-                        {character.episode.slice(0, 4).map((urlEpisode: EpisodeProps) => (
+                        {character.episode.slice(0, 4).map((urlEpisode: string) => (
                             <EpisodeComponent key={urlEpisode} urlEpisode={urlEpisode} />
                         ))}
                     </div>
