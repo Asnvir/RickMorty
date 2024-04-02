@@ -1,7 +1,7 @@
 
-# Rick & Morty - React - IN PROGRESS
+# Rick & Morty - React
 
-Rick & Morty - React is an in-progress project that utilizes React to build an application using the Rick and Morty API. The project incorporates various technologies to enhance the development process and create a seamless user experience.
+Rick & Morty -  is an project that utilizes React to build an application using the Rick and Morty API. The project incorporates various technologies to enhance the development process and create a seamless user experience.
 
 ## Technologies Used
 - **React**: A JavaScript library for building user interfaces, providing efficient component-based development.
