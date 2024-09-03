@@ -1,7 +1,8 @@
 
 # Rick & Morty - React
 
-Rick & Morty -  is an project that utilizes React to build an application using the Rick and Morty API. The project incorporates various technologies to enhance the development process and create a seamless user experience.
+## Description
+A React application leveraging the Rick and Morty API to enable multifaceted character and episode searches.
 
 ## Technologies Used
 - **React**: A JavaScript library for building user interfaces, providing efficient component-based development.
